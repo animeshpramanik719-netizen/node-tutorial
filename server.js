@@ -2,7 +2,7 @@ const express = require('express'); // FIXED: Changed import to require
 const app = express();
 const db = require('./db'); 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json()); //req.body // download body parser npm i body-parser
+app.use(bodyParser.json()); //req.body // download body parser npm 
 const mongoose= require('mongoose');
 
 app.get('/', (req, res) => {
@@ -37,7 +37,7 @@ app.use('/person', personRouter);
 //use the router for all routes starting with /menuItem
 app.use('/menuItem', menuItemRoutes); 
 
-
+// start the server
 app.listen(6969, () => {
   console.log('Server is running on http://localhost:6969');
 });
