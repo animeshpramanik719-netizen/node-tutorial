@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 // Define the mongodb connection URL
 // FIXED: Changed the port from 2701 to the standard 27017
-const mongoURL = "mongodb://localhost:27017/hotels"
-
+//const mongoURL = "mongodb://localhost:27017/hotels"
+const mongoURL = 'mongodb+srv://animesh9906:animesh990678@cluster0.oubyoyx.mongodb.net/';
 mongoose.connect(mongoURL);
 
 // Connect to the MongoDB database using Mongoose
