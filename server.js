@@ -5,11 +5,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); //req.body // download body parser npm 
 const mongoose= require('mongoose');
 const Person = require('./person');
-
+require('dotenv').config();
 connectDB();
 
 app.get('/', (req, res) => {
-  res.send('Welcome to my hotel... How can i help you ?');
+  res.send('Welcome to my hotel... How can i help you ?');s
 });
 
 //POST route to create a new person
