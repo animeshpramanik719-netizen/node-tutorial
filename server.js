@@ -4,7 +4,7 @@ const connectDB = require("./db");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json()); //req.body // download body parser npm
 const mongoose = require("mongoose");
-// const Person = require("./person");
+const Person = require("./person");
 require("dotenv").config();
 connectDB();
 
@@ -13,23 +13,23 @@ app.get("/", (req, res) => {
 });
 
 //POST route to create a new person
-// app.post('/person', async (req, res) =>{
-//   try{
-//     const data= req.body
+app.post('/person', async (req, res) =>{
+   try{
+     const data= req.body
 
 //   //create a new person document using the person model
-//   const newPerson = new Person(data);
+   const newPerson = new Person(data);
 
 //  //save the new person document to the database
-//  const response = await newPerson.save();
-//  console.log('data saved');
-//  res.status(200).json(response)
+  const response = await newPerson.save();
+  console.log('data saved');
+  res.status(200).json(response)
 
-//   }catch(err){
-//     console.log(err);
-//     res.status(500).json({error: 'internal server error'});
-//   }
-// });
+  }catch(err){
+    console.log(err);
+     res.status(500).json({error: 'internal server error'});
+   }
+ });
 
 // Import the router file
 
