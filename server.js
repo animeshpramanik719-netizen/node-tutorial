@@ -6,6 +6,10 @@ app.use(bodyParser.json()); //req.body // download body parser npm
 const mongoose = require("mongoose");
 const Person = require("./person");
 require("dotenv").config();
+const passport=require('passport');
+const LocalStrategy= require('passport-local').Strategy;
+//const person=require('./person');
+
 connectDB();
 
 
@@ -16,8 +20,29 @@ connectDB();
  }
 
 app.use(logrequest);//use the middleware function
+
+passport.use(new LocalStrategy(async(username, password, done) =>{
+  //authenticate the user using the username and password
+  try{
+    console.log('Received username:', username, password);
+    const user= await person.findOne({username: username});
+    if(!user)
+      return done(null, false,{message: 'Incorrect username '});
+
+const isPasswordMatch=user.password === password ? true : false;
+if(!isPasswordMatch){
+  return done(null, false);
+}else{
+  return done(null, false, {message: 'Incorrect password'});
+}
+  }catch(err){
+return done(err);
+  }
+}))
+
+app.use(passport.initialize());
  
-app.get("/" , function(req, res) {
+app.get("/", passport.authenticate('local',{session: false}), function(req, res) {
   res.send("Welcome to my hotel... How can i help you ?");
 });
 
