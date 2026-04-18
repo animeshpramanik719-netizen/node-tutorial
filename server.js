@@ -49,7 +49,6 @@ app.use(logrequest); // Use the middleware function
 
 
 // Import the router file
-
 const personRouter = require("./personRoutes");
 const menuItemRoutes = require("./MenuItemsRoutes");
 //use the router for all routes starting with /person
