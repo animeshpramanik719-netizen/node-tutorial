@@ -42,7 +42,8 @@ return done(err);
 
 app.use(passport.initialize());
  
-app.get("/", passport.authenticate('local',{session: false}), function(req, res) {
+const localAuthMiddleware = passport.authenticate('local', {session: false})
+app.get("/", localAuthMiddleware, function(req, res) {
   res.send("Welcome to my hotel... How can i help you ?");
 });
 
