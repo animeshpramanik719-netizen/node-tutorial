@@ -8,7 +8,16 @@ const Person = require("./person");
 require("dotenv").config();
 connectDB();
 
-app.get("/", (req, res) => {
+
+ //Middleware function 
+ const logrequest=(req, res, next)=>{
+    console.log(`${new Date().toLocaleString()} Request Mode to: ${req.originalUrl}`);
+    next(); // Call the next middleware function
+ }
+
+app.use(logrequest);//use the middleware function
+ 
+app.get("/" , function(req, res) {
   res.send("Welcome to my hotel... How can i help you ?");
 });
 
@@ -30,6 +39,11 @@ app.post('/person', async (req, res) =>{
      res.status(500).json({error: 'internal server error'});
    }
  });
+
+
+
+app.use(logrequest); // Use the middleware function
+
 
 // Import the router file
 
