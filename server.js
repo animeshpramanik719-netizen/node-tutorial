@@ -9,7 +9,7 @@ require("dotenv").config();
 connectDB();
 
 
- //Middleware function 
+ //Middleware function  
  const logrequest=(req, res, next)=>{
     console.log(`${new Date().toLocaleString()} Request Mode to: ${req.originalUrl}`);
     next(); // Call the next middleware function
