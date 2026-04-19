@@ -51,7 +51,7 @@ app.post("/person", async (req, res) => {
 });
 
 // Routers
-const personRouter = require("./personRoutes");
+const personRouter = require("./personRoutes,");
 const menuItemRoutes = require("./MenuItemsRoutes");
 
 app.use("/person", personRouter);
