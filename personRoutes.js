@@ -59,11 +59,21 @@ res.json({ token });
   }catch(err){
     console.error(err);
     res.status(500).json({error: 'Internal server Error'});
-
-
-
   }
+})
 
+router.get('/profile', jwtAuthMiddleware, async (req, res) =>{
+  try{
+    const userData = req.user;
+    console.log("user Data:", userData)
+
+    const userId = userData.id;
+    const user = await Person.findById(userId);
+    res.status(200).json({ user });
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error: 'Internal server Error'});
+  }
 })
 
 
