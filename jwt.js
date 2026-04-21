@@ -1,28 +1,37 @@
 const jwt = require('jsonwebtoken');
 
-const jwtAuthMiddleware = (req, res, next)  =>{
+// Middleware to verify JWT
+const jwtAuthMiddleware = (req, res, next) => {
+  try {
+    // Get Authorization header
+    const authHeader = req.headers.authorization;
 
-    // Extract the jwt token from the request header
-    const hatoken = req.header.authorization.split(' ')[1];
-if(!token) return res.status(401).json({error: 'Unauthorized'});
+    if (!authHeader) {
+      return res.status(401).json({ error: 'Authorization header missing' });
+    }
 
-try{
-    // Verify the token
-    const decoded = jwt.verify(token, process.env,JWT_SECRET);
+    // Extract token
+    const token = authHeader.split(' ')[1];
 
-    // Attach user info to the request object
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     req.user = decoded;
     next();
-}catch(err){
+
+  } catch (err) {
     console.log(err);
-    res.status(401).json({error: 'Invalid token'});
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};
 
-}
-}
-// Funcation to generate a jwt token
-const generateToken =(userData) =>{
-    // Generate a token with user data and secret key
-    return jwt.sign(userData, process.env.JWT_SECRET)
-}
+// Generate JWT
+const generateToken = (userData) => {
+  return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
 
-module.exports = {jwtAuthMiddleware, generateToken};
+module.exports = { jwtAuthMiddleware, generateToken };

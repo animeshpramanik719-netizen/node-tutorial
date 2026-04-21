@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Person = require("./person");
-const{jwtAuthMiddleware,generateToken} = require("./jwt");
+const { jwtAuthMiddleware, generateToken } = require("./jwt");
 
-
-// POST add person
+// POST - Signup
 router.post("/signup", async (req, res) => {
   try {
     const data = req.body;
@@ -12,15 +11,18 @@ router.post("/signup", async (req, res) => {
     const newPerson = new Person(data);
     const response = await newPerson.save();
 
-    const payload ={
-      id: response.id,
-      username: response.username
-    }
-console.log("json.stringify(payload))");
-const token = generateToken(payload)``;
-console.log("Token is: ", token);
+    const payload = {
+      id: response._id,
+      username: response.username,
+    };
 
-    res.status(200).json({response: response, token: token});
+    console.log(JSON.stringify(payload));
+
+    const token = generateToken(payload);
+
+    console.log("Token is:", token);
+
+    res.status(200).json({ response, token });
 
   } catch (err) {
     console.log(err);
@@ -28,12 +30,11 @@ console.log("Token is: ", token);
   }
 });
 
-// GET all persons
-router.get("/", async (req, res) => {
+// GET all persons (protected route example)
+router.get("/", jwtAuthMiddleware, async (req, res) => {
   try {
     const persons = await Person.find();
     res.status(200).json(persons);
-
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
@@ -45,15 +46,9 @@ router.get("/:workType", async (req, res) => {
   try {
     const workType = req.params.workType;
 
-    if (
-      workType === "chef" ||
-      workType === "manager" ||
-      workType === "waiter"
-    ) {
+    if (["chef", "manager", "waiter"].includes(workType)) {
       const response = await Person.find({ work: workType });
-
       res.status(200).json(response);
-
     } else {
       res.status(400).json({ error: "Invalid work type" });
     }
@@ -64,7 +59,7 @@ router.get("/:workType", async (req, res) => {
   }
 });
 
-// UPDATE person
+// UPDATE
 router.put("/:id", async (req, res) => {
   try {
     const personId = req.params.id;
@@ -73,10 +68,7 @@ router.put("/:id", async (req, res) => {
     const response = await Person.findByIdAndUpdate(
       personId,
       updateData,
-      {
-        new: true,
-        runValidators: true,
-      }
+      { new: true, runValidators: true }
     );
 
     if (!response) {
@@ -91,7 +83,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE person
+// DELETE
 router.delete("/:id", async (req, res) => {
   try {
     const personId = req.params.id;
