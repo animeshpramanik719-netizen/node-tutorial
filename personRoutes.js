@@ -30,6 +30,43 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+//login route
+router.post("/login", async (req,res) =>{
+
+  try{
+// Extract username and oassword from request body
+const {username,password} = req.body;
+
+// Find user in database
+const user = await Person.findOne({username: username});
+
+//if user not exists or password does not match, return error
+if (!user || !(await user.comparePassword(password))) {
+  return res.status(401).json({ error: "Invalid username or password" });
+}
+
+
+
+// Generate token
+const payload = {
+  id: user._id,
+  username: user.username,
+};
+const token = generateToken(payload);
+
+res.json({ token });
+
+  }catch(err){
+    console.error(err);
+    res.status(500).json({error: 'Internal server Error'});
+
+
+
+  }
+
+})
+
+
 // GET all persons (protected route example)
 router.get("/", jwtAuthMiddleware, async (req, res) => {
   try {
